@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Old school snake game all on one html page for ultra fast setup.">
+    <meta name="keywords" content="Snake,Game,JavaScript,Retro">
+    <meta name="author" content="Titan Global Tech, LLC">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake</title>
+  <link rel="icon" href="images/icon.png" type="image/x-icon">
+    <style type="text/css">
+        body {
+            background-color: black;
+        }
+        #gc {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border: 5px groove darkgreen;
+        }
+        #pane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+
+<div id="pane">
+    <canvas id="gc"></canvas>
+</div>
+
+<script>
+    window.onload = function() {
+        canv = document.getElementById('gc');
+        ctx = canv.getContext("2d");
+
+        newGame();
+
+        window.addEventListener('resize', function() {
+            newGame();
+        });
+
+        startGame();
+    };
+
+    function startGame() {
+
+        document.addEventListener('keydown', keyPush);
+
+        // Game Speed - Current: 15 tiles per second
+        setInterval(gameRemote, 1000 / 15);
+    }
+
+    isGameOver = false;
+    isPaused = false;
+    buttonAvailable = true;
+
+    gs = 20;
+    tc_x = null;
+    tc_y = null;
+
+    px = py = null;
+    ax = ay = 15;
+
+    xv = yv = 0;
+
+    trail = [];
+    tail = 3;
+
+    gameScore = 0;
+    highScore = localStorage.getItem('highScore') || 0;
+
+    function gameRemote() {
+        if(!isPaused && !isGameOver) {
+            game();
+        }
+    }
+
+    function game() {
+        px += xv;
+        py += yv;
+
+        buttonAvailable = true;
+
+        /* Wraps Snake around Sides
+        if(px < 0) {
+            px = tc_x - 1;
+        }
+        if(px > tc_x-1) {
+            px = 0;
+        }
+
+        if(py < 0) {
+            py = tc_y - 1;
+        }
+        if(py > tc_y-1) {
+            py = 0;
+        }*/
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canv.width, canv.height);
+
+        ctx.fillStyle = "lime";
+        for(let i = 0; i < trail.length; i++) {
+            ctx.fillRect(trail[i].x * gs, trail[i].y * gs, gs - 2, gs - 2);
+
+            console.log(px + ", " + py);
+            console.log(trail[i].x * gs + " : " + trail[i].y * gs);
+
+            if(trail[i].x === px && trail[i].y === py) {
+                if(tail > 3) {
+                    gameOver();
+                }
+            }
+            if(px < 0 || px > tc_x-1 || py < 0 || py > tc_y-1) {
+                gameOver();
+            }
+        }
+
+        trail.push({ x: px, y: py });
+        while(trail.length > tail) {
+            trail.shift();
+        }
+
+        if(ax === px && ay === py) {
+            tail++;
+            ax = Math.floor(Math.random() * tc_x);
+            ay = Math.floor(Math.random() * tc_y);
+
+            if(!isGameOver) {
+                gameScore += 1;
+            }
+        }
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
+
+        if(isGameOver) {
+            ctx.fillStyle = 'white';
+            ctx.font = "60px Algerian";
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillText("GAME OVER!", (tc_x/2)*gs, ((2/5)*tc_y)*gs);
+            //ctx.lineWidth = 1.5;
+            ctx.strokeStyle = 'red';
+            ctx.strokeText('GAME OVER!', (tc_x/2)*gs, ((2/5)*tc_y)*gs);
+
+            ctx.font = "bold 30px Courier";
+            ctx.fillText("Score: " + gameScore, (tc_x/2)*gs, ((4/7)*tc_y)*gs);
+            ctx.fillText("High Score: " + highScore, (tc_x/2)*gs, ((15/24)*tc_y)*gs);
+        }
+    }
+
+    function keyPush(event) {
+        switch(event.keyCode) {
+            case 37:               // left key
+                if(xv !== 1 && buttonAvailable) {
+                    xv = -1; yv = 0;
+                    isPaused = false;
+                }
+                buttonAvailable = false;
+                break;
+            case 38:                // up key
+                if(yv !== 1 && buttonAvailable) {
+                    xv = 0; yv = -1;
+                    isPaused = false;
+                }
+                buttonAvailable = false;
+                break;
+            case 39:                 // right key
+                if(xv !== -1 && buttonAvailable) {
+                    xv = 1; yv = 0;
+                    isPaused = false;
+                }
+                buttonAvailable = false;
+                break;
+            case 40:                // down key
+                if(yv !== -1 && buttonAvailable) {
+                    xv = 0; yv = 1;
+                    isPaused = false;
+                }
+                buttonAvailable = false;
+                break;
+            case 13:                // ENTER
+                if(isGameOver) {
+                    newGame();
+                }
+                break;
+            case 32:                // SPACE bar
+                if(isGameOver) {
+                    newGame();
+                } else {
+                    isPaused = !isPaused;
+                }
+        }
+    }
+
+    function gameOver() {
+        isGameOver = true;
+
+        let gradient = ctx.createLinearGradient(0, 0, tc_x*gs, 0);
+        gradient.addColorStop(0, 'white');
+        gradient.addColorStop(.2, '#3a3a3a');
+        gradient.addColorStop(.4, 'white');
+        gradient.addColorStop(.6, '#3a3a3a');
+        gradient.addColorStop(.8, 'white');
+        gradient.addColorStop(1, '#3a3a3a');
+        ctx.fillStyle = gradient;
+
+        if (gameScore > highScore) {
+            localStorage.setItem('highScore', gameScore);
+            highScore = gameScore;
+        }
+    }
+
+    function newGame() {
+        resizeBoard();
+
+        xv = yv = 0;   // player begins at rest
+        tail = 3;      // tail
+        gameScore = 0; // score
+
+        ax = Math.floor(Math.random() * tc_x);
+        ay = Math.floor(Math.random() * tc_y);
+
+        if(!isGameOver) {
+            px = Math.floor(tc_x / 2);
+            py = Math.floor(tc_y / 2);
+        } else {
+            if(px < 0){
+                px = px + 2;
+            }
+            if(px > tc_x-1) {
+                px = px - 2;
+            }
+            if(py < 0) {
+                py = py + 2;
+            }
+            if(py > tc_y-1) {
+                py = py - 2;
+            }
+        }
+
+        isGameOver = false;
+    }
+
+    function resizeBoard() {
+        tc_x = Math.floor(window.innerWidth / gs);
+        tc_y = Math.floor(window.innerHeight / gs);
+
+        canv.setAttribute('width', tc_x * gs);
+        canv.setAttribute('height', tc_y * gs);
+    }
+</script>
+
+
+
+</body>
+</html>
