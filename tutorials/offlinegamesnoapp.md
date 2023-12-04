@@ -1,4 +1,4 @@
-#How to get games offline without installing an app or mobile data.
+How to get games offline without installing an app or mobile data.
 1. Open a browser.
 2. Go to poki.com.
 3. Click the elipsis in the top right corner of the app.
