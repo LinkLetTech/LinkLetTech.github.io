@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New tab</title>
+    <link rel="icon" href="images/icon.png" type="image/x-icon">
+    <style>
+          #parent {
+      width: 100%;
+      height: 100px;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    .child {
+  display: inline-block;
+  width: 24%;
+  height: 80px;
+}
+    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <main>
+      <p style="margin: 10px 0;padding: 5px;text-align:center;border: 3px solid red;text-indent: 10px;font-size: 50px;">Linklet Pro</p>
+        <hr>
+        <div id="parent">
+          <div class="child">
+            <img src="images/Chrome.png" width="50" height="50">
+            <form action="https://www.google.com/search?q=" class="searchform" method="get" name="searchform" target="_blank">
+              <input name="sitesearch" type="hidden">
+              <input autocomplete="on" class="form-control search" name="q" placeholder="Search in google" required="required"  type="text">
+              <button class="button" type="submit">Search</button>
+              </form>
+          </div>
+          <div class="child">            
+            <img src="images/Youtube.png" width="50" height="50">
+            <form action="https://www.youtube.com/search" class="searchform" method="get" name="searchform" target="_blank">
+              <input name="sitesearch" type="hidden">
+              <input autocomplete="on" class="form-control search" name="q" placeholder="Search in youtube" required="required"  type="text">
+              <button class="button" type="submit">Search</button>
+            </form></div>
+          <div class="child">          
+            <img src="images/Github.png" width="50" height="50">
+            <form action="https://github.com/search?q=" class="searchform" method="get" name="searchform" target="_blank">
+              <input name="sitesearch" type="hidden">
+              <input autocomplete="on" class="form-control search" name="q" placeholder="Search in github" required="required"  type="text">
+              <button class="button" type="submit">Search</button>
+              </form></div>
+          <div class="child">              
+            <img src="images/StackOverFlow.png" width="50" height="50">
+            <form action="https://stackoverflow.com/search?q=" class="searchform" method="get" name="searchform" target="_blank">
+              <input name="sitesearch" type="hidden">
+              <input autocomplete="on" class="form-control search" name="q" placeholder="Search in stack overflow" required="required"  type="text">
+              <button class="button" type="submit">Search</button>
+              </form></div>
+        </div>
+        <div class="container">
+          <!-- form to enter details of site -->
+          <form class="form" action="#">
+            <div class="input-field">
+              <label for="site_name">Name</label>
+              <input name="site_name" type="text" 
+                     placeholder="site name">
+            </div>
+        
+            <div class="input-field">
+              <label for="url">URL</label>
+              <input name="url" type="text" 
+                     placeholder="https://www.example.com">
+            </div>
+                
+            <button class="save_button">Save</button>
+          </form>
+        
+          <!-- section where bookmarks will be displayed   -->
+          <h2>Saved Linklets</h2>
+            
+          <div class="bookmarks"></div>
+        </div>
+        <embed src="https://edition.cnn.com/interactive/2019/06/us/dad-joke-generator-trnd/" style="width:70%; height: 1390px;">
+        <div class="strawpoll-embed" id="strawpoll_kjn18J5b0yQ" style="height: 544px; max-width: 640px; width: 100%; margin: 0 auto; display: flex; flex-direction: column;"><iframe title="StrawPoll Embed" id="strawpoll_iframe_kjn18J5b0yQ" src="https://strawpoll.com/embed/kjn18J5b0yQ" style="position: static; visibility: visible; display: block; width: 100%; flex-grow: 1;" frameborder="0" allowfullscreen allowtransparency>Loading...</iframe><script async src="https://cdn.strawpoll.com/dist/widgets.js" charset="utf-8"></script></div>
+    </main>
+	<script src="index.js"></script>
+  </body>
+</html>
